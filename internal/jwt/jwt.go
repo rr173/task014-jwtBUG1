@@ -137,8 +137,11 @@ func (c *Claims) UnmarshalJSON(data []byte) error {
 }
 
 // numToDate 将 JSON 还原出的数值（可能是 float64、int64 或 json.Number）
-// 解释为 Unix 秒并返回对应的 UTC 时间指针。
+// 解释为 Unix 秒并返回对应的 UTC 时间指针。nil 值视为"未设置"。
 func numToDate(v any) (*time.Time, error) {
+	if v == nil {
+		return nil, nil
+	}
 	switch n := v.(type) {
 	case float64:
 		t := time.Unix(int64(n), 0).UTC()
